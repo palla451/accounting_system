@@ -16,3 +16,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('layout.dashboard');
 });
+
+
+Route::prefix('dashboard')->group(function(){
+
+    Route::get('/', function () {return view('layout.dashboard');});
+
+});
