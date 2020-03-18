@@ -11,13 +11,13 @@
 
 @section('content')
     <h1>Inputs and Outputs</h1>
-    <a class="btn btn-success" href="javascript:void(0)" id="createNewInput"> Create New Product</a>
+    <a class="btn btn-success" href="javascript:void(0)" id="createNewInput">Insert new Input</a>
     <table class="table table-bordered data-table" width="100%">
         <thead>
         <tr>
             <th>No</th>
             <th>Description</th>
-            <th>Method payment</th>
+            <th>Payment</th>
             <th>Import</th>
             <th>Date</th>
             <th width="280px">Action</th>
@@ -99,8 +99,8 @@
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                 {data: 'description', name: 'description'},
-                {data: 'import', name: 'import'},
                 {data: 'payment', name: 'payment'},
+                {data: 'import', name: 'import'},
                 {data: 'date', name: 'date'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ]
