@@ -6,5 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Input extends Model
 {
-    //
+    protected $fillable = [
+        'user_id',  'description', 'import' ,'date'
+    ];
+
+    /**
+     * Get all of payments method.
+     */
+    public function payments()
+    {
+        return $this->morphToMany(Payment::class, 'paymentable');
+    }
 }

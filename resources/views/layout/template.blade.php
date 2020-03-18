@@ -27,9 +27,21 @@
     @include('layout.sidebar')
     <!-- /#sidebar-wrapper -->
 
-    <!-- Page Content -->
-   @include('layout.navbar')
+    <div id="page-content-wrapper">
+
+        <!-- Navbar -->
+        @include('layout.navbar')
+        <!-- /#navbar-toggle -->
+
+        <!-- Content -->
+        <div class="container-fluid">
+            @yield('content')
+        </div>
+        <!-- /#content -->
+
+    </div>
     <!-- /#page-content-wrapper -->
+
 
 </div>
 
