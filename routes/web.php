@@ -13,13 +13,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('layout.dashboard');
-});
+//Route::get('/', function () {
+//    return view('layout.dashboard');
+//});
 
 
 Route::prefix('dashboard')->group(function(){
 
-    Route::get('/', function () {return view('layout.dashboard');});
+    Route::get('/', function (){
+          return redirect()->route('inputs.index');
+    });
+
+//    Route::get('/index', 'InputsController@index');
+
+    Route::resource('inputs','InputsController');
 
 });
