@@ -37,7 +37,7 @@
     <div id="page-content-wrapper">
 
         <!-- Navbar -->
-        @include('layout.navbar')
+        @include('layout.navbar', ['user' => $user])
         <!-- /#navbar-toggle -->
 
         <!-- Content -->

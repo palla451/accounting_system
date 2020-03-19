@@ -1,12 +1,7 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
-use App\Models\Input;
-use App\Models\Job;
-use App\Models\Output;
-use App\Models\Role;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 

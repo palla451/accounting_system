@@ -10,7 +10,7 @@
     @stop
 
 @section('content')
-    <h1>Inputs and Outputs</h1>
+    <h1>Inputs</h1>
     <a class="btn btn-success" href="javascript:void(0)" id="createNewInput">Insert new Input</a>
     <table class="table table-bordered data-table" width="100%">
         <thead>

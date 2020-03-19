@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Payment;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Input;
 use DateTime;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
 class InputsController extends Controller
@@ -51,9 +53,10 @@ class InputsController extends Controller
         }
 
         $payments = Payment::all();
+        $user = Auth::user();
 
 
-        return view('layout.dashboard',compact('payments'));
+        return view('layout.dashboard',['payments' => $payments, 'user' => $user]);
 //        return view('layout.dashboard',compact('products'));
     }
 
