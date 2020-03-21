@@ -2,6 +2,8 @@
 
 @section('title', 'Dashboard')
 
+
+<div class ="loader loader-default is-active"></div>
 @section('graphic')
     <div class="jumbotron">
         <h1>Bootstrap Tutorial</h1>
@@ -35,8 +37,8 @@
                     <h4 class="modal-title" id="modelHeading"></h4>
                 </div>
                 <div class="modal-body">
-                    <form id="productInput" name="productInput" class="form-horizontal">
-                        <input type="hidden" name="product_id" id="product_id">
+                    <form id="addInput" name="addInput" class="form-horizontal">
+                        <input type="hidden" name="input_id" id="input_id">
 
                         <div class="form-group">
                             <label for="description" class="col-sm-2 control-label">Descriptions</label>
@@ -48,7 +50,7 @@
                         <div class="form-group">
                             <label for="import" class="col-sm-2 control-label">Import</label>
                             <div class="col-sm-12">
-                                <input type="number" id="import" name="import" required="" placeholder="Es. 12.58" class="form-control" required />
+                                <input type="text" id="import" name="import" required="" placeholder="Es. 12,58" class="form-control" required />
                             </div>
                         </div>
 
@@ -67,12 +69,13 @@
                             <label class="col-sm-2 control-label">Date</label>
                             <div class='col-sm-12'>
                                 <div class="input-group-prepend">
-                                    <input class="form-control" name="date" placeholder="dd/mm/yyyy" type="text"  id="datepicker" />
+                                    <input class="form-control" name="date" placeholder="dd-mm-yyyy" type="text"  id="datepicker" />
                                 </div>
                             </div>
                         </div>
 
                         <div class="col-sm-offset-2 col-sm-10">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary" id="saveBtn" value="create">Send</button>
                         </div>
                     </form>
@@ -85,7 +88,6 @@
 @section('scripts')
 <script type="text/javascript">
     $(function () {
-
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -108,39 +110,43 @@
 
         $('#createNewInput').click(function () {
             $('#saveBtn').val("create-input");
-            $('#product_id').val('');
-            $('#productForm').trigger("reset");
+            $('#input_id').val('');
+            $('#addInput').trigger("reset");
             $('#modelHeading').html("Create New Input");
             $('#ajaxModel').modal('show');
         });
 
-        $('body').on('click', '.editProduct', function () {
-            var product_id = $(this).data('id');
-            $.get("{{ route('inputs.index') }}" +'/' + product_id +'/edit', function (data) {
-                $('#modelHeading').html("Edit Product");
-                $('#saveBtn').val("edit-user");
+        $('body').on('click', '.editInput', function () {
+            var input_id = $(this).data('id');
+
+            $.get("{{ route('inputs.index') }}" +'/' + input_id +'/edit', function (data) {
+                var dateCovert = convertDateTostring(data.date);
+                $('#input_id').val(data.input_id);
+                $('#modelHeading').html("Edit Input");
+                $('#saveBtn').val("edit-input");
                 $('#ajaxModel').modal('show');
-                $('#product_id').val(data.id);
-                $('#name').val(data.name);
-                $('#detail').val(data.detail);
+                $('#input_id').val(input_id);
+                $('#description').val(data.description);
+                $('#payment').val(data.payments[0].id);
+                $('#import').val(data.import);
+                $('#datepicker').val(dateCovert);
             })
         });
 
         $('#saveBtn').click(function (e) {
             e.preventDefault();
             $(this).html('Sending..');
-
+            var input = $(this).data("id");
             $.ajax({
-                data: $('#productInput').serialize(),
+                data: $('#addInput').serialize(),
                 url: "{{ route('inputs.store') }}",
                 type: "POST",
                 dataType: 'json',
                 success: function (data) {
-
-                    $('#productForm').trigger("reset");
+                    $('#addInput').trigger("reset");
                     $('#ajaxModel').modal('hide');
+                    $('#saveBtn').html('Send');
                     table.draw();
-
                 },
                 error: function (data) {
                     console.log('Error:', data);
@@ -149,7 +155,7 @@
             });
         });
 
-        $('body').on('click', '.deleteProduct', function () {
+        $('body').on('click', '.deleteInput', function () {
 
             var product_id = $(this).data("id");
             confirm("Are You sure want to delete !");
@@ -167,6 +173,15 @@
         });
 
     });
+
+
+function convertDateTostring(dateConvert) {
+    var dateConvert = dateConvert.toString().slice(0,10);
+    var dateSplit = dateConvert.split('-');
+    var newDate = dateSplit[2] + '-' + dateSplit[1] + '-' + dateSplit[0];
+    return newDate;
+}
+
 </script>
 
 

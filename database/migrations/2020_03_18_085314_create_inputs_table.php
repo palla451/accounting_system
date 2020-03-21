@@ -17,7 +17,7 @@ class CreateInputsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id')->index('user_id');
             $table->text('description');
-            $table->decimal('import',15,2);
+            $table->string('import', 15);
             $table->dateTime('date');
             $table->timestamps();
         });
