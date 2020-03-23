@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Output extends Model
 {
     protected $fillable = [
-        'user_id', 'description', 'date'
+        'user_id', 'description', 'import', 'date'
     ];
 
     /**

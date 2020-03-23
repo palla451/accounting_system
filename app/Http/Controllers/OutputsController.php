@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Output;
 use App\Models\Payment;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Models\Input;
 use DateTime;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
-class InputsController extends Controller
+class OutputsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,7 +21,7 @@ class InputsController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Input::latest()->with('payments')->get();
+            $data = Output::latest()->with('payments')->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function($row){
@@ -47,7 +47,7 @@ class InputsController extends Controller
         $payments = Payment::all();
         $user = Auth::user();
 
-        return view('layout.dashboard',['payments' => $payments, 'user' => $user]);
+        return view('layout.dashboardOutput',['payments' => $payments, 'user' => $user]);
     }
 
     /**
@@ -73,7 +73,7 @@ class InputsController extends Controller
         $myDateTime = DateTime::createFromFormat('d-m-Y', $request->get('date'));
         $newDateString = $myDateTime->format('Y-m-d H:i');
 
-        $input = Input::updateOrCreate(['id' => $request->record_id],
+        $output = Output::updateOrCreate(['id' => $request->record_id],
             [
                 'user_id' => $user->getAuthIdentifier(),
                 'description' => $request->description,
@@ -83,18 +83,18 @@ class InputsController extends Controller
 
         if($request->record_id){
 
-            $input = Input::with('payments')->find($request->record_id);
-            $input->payments()->detach();
-            $input->payments()->attach($request->payment,[
+            $output = Output::with('payments')->find($request->record_id);
+            $output->payments()->detach();
+            $output->payments()->attach($request->payment,[
                 'paymentable_id' => $request->record_id,
-                'paymentable_type' => 'App\Models\Input']);
+                'paymentable_type' => 'App\Models\Output']);
 
             return response()->json(['success'=>'Product saved successfully.']);
 
         }else {
-            $input->payments()->attach($request->get('payment'),[
-                'paymentable_id' => $input->getAttribute('id'),
-                'paymentable_type' => 'App\Models\Input']);
+            $output->payments()->attach($request->get('payment'),[
+                'paymentable_id' => $output->getAttribute('id'),
+                'paymentable_type' => 'App\Models\Output']);
 
             return response()->json(['success'=>'Product saved successfully.']);
         }
@@ -120,9 +120,9 @@ class InputsController extends Controller
      */
     public function edit($id)
     {
-        $input = Input::with('payments')->find($id);
+        $output = Output::with('payments')->find($id);
 
-        return response()->json($input);
+        return response()->json($output);
     }
 
     /**
@@ -146,10 +146,10 @@ class InputsController extends Controller
      */
     public function destroy($id)
     {
-        $input = Input::with('payments')->find($id);
-        $input->payments()->detach();
-        $input->delete();
+        $output = Output::with('payments')->find($id);
+        $output->payments()->detach();
+        $output->delete();
 
-        return response()->json(['success'=>'Input deleted successfully.']);
+        return response()->json(['success'=>'Output deleted successfully.']);
     }
 }

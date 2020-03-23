@@ -37,7 +37,7 @@
 
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <script src="{{ asset('js/jquery-3.4.1.min.js') }}" crossorigin="anonymous"></script>
-        <script src="{{ asset('js/bootstrap.bundle.min.js') }}" crossorigin="anonymous"></script>
+        <script src="{{ asset('vendor/jquery/jquery.min.js') }}" crossorigin="anonymous"></script>
+        <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.js') }}" crossorigin="anonymous"></script>
     </body>
 </html>
