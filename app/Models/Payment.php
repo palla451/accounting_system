@@ -15,7 +15,7 @@ class Payment extends Model
      */
     public function inputs()
     {
-        return $this->morphedByMany(Payment::class, 'paymentable');
+        return $this->morphedByMany(Input::class, 'paymentable');
     }
 
     /**
@@ -23,6 +23,6 @@ class Payment extends Model
      */
     public function outputs()
     {
-        return $this->morphedByMany(Payment::class, 'paymentable');
+        return $this->morphedByMany(Output::class, 'paymentable');
     }
 }

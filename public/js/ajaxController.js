@@ -1,7 +1,6 @@
 $(function () {
-    var route = $('.table').data('route');
-    console.log(route);
 
+    var route = $('.table').data('route');
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -22,24 +21,24 @@ $(function () {
         ]
     });
 
-    $('#createNewInput').click(function () {
+    $('#createNewRecord').click(function () {
         $('#saveBtn').val("create-input");
-        $('#input_id').val('');
-        $('#addInput').trigger("reset");
+        $('#record_id').val('');
+        $('#addRecord').trigger("reset");
         $('#modelHeading').html("Create New Input");
         $('#ajaxModel').modal('show');
     });
 
-    $('body').on('click', '.editInput', function () {
-        var input_id = $(this).data('id');
+    $('body').on('click', '.editRecord', function () {
+        var record_id = $(this).data('id');
 
-        $.get(route + '/' +input_id + '/edit', function (data) {
+        $.get(route + '/' + record_id + '/edit', function (data) {
             var dateCovert = convertDateTostring(data.date);
-            $('#input_id').val(data.input_id);
+            $('#record_id').val(data.record_id);
             $('#modelHeading').html("Edit Input");
             $('#saveBtn').val("edit-input");
             $('#ajaxModel').modal('show');
-            $('#input_id').val(input_id);
+            $('#record_id').val(record_id);
             $('#description').val(data.description);
             $('#payment').val(data.payments[0].id);
             $('#import').val(data.import);
@@ -50,9 +49,8 @@ $(function () {
     $('#saveBtn').click(function (e) {
         e.preventDefault();
         $(this).html('Sending..');
-        var input = $(this).data("id");
         $.ajax({
-            data: $('#addInput').serialize(),
+            data: $('#addRecord').serialize(),
             url: route,
             type: "POST",
             dataType: 'json',
@@ -62,23 +60,24 @@ $(function () {
             },
             success: function (data) {
                 $(".se-pre-con").delay(2000).fadeOut();
-                $('#addInput').trigger("reset");
+                $('#addRecord').trigger("reset");
                 $('#saveBtn').html('Send');
                 table.draw();
             },
             error: function (data) {
                 console.log('Error:', data);
-                alert('Ops, qualcosa è andato storto.....')
+                alert('Ops, qualcosa è andato storto.....');
+                $(".se-pre-con").delay(2000).fadeOut();
             }
         });
     });
 
-    $('body').on('click', '.deleteInput', function () {
-        var product_id = $(this).data("id");
+    $('body').on('click', '.deleteRecord', function () {
+        var record_id = $(this).data("id");
         confirm("Are You sure want to delete !");
         $.ajax({
             type: "DELETE",
-            url: route + '/' +product_id,
+            url: route + '/' + record_id,
             beforeSend: function () {
                 $(".se-pre-con").css("opacity", 0.5).show();
             },

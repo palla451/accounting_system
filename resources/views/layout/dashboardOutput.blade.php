@@ -1,9 +1,10 @@
 @extends('layout.template')
 
-@section('title', 'Dashboard Input')
+@section('title', 'Dashboard Ouput')
 
 
 <div class ="loader loader-default is-active"></div>
+
 @section('graphic')
     <div class="jumbotron">
         <h1>Bootstrap Tutorial</h1>
@@ -12,9 +13,9 @@
     @stop
 
 @section('content')
-    <h1>Inputs</h1>
-    <a class="btn btn-success" href="javascript:void(0)" id="createNewRecord">Insert new Input</a>
-    <table class="table table-bordered data-table" width="100%" data-route="{{ route('inputs.index') }}">
+    <h1>Outputs</h1>
+    <a class="btn btn-success" href="javascript:void(0)" id="createNewRecord">Insert new Output</a>
+    <table class="table table-bordered data-table" width="100%" data-route="{{ route('outputs.index') }}">
         <thead>
         <tr>
             <th>No</th>
