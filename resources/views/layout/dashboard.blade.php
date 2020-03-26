@@ -5,11 +5,13 @@
 
 <div class ="loader loader-default is-active"></div>
 @section('graphic')
-    <div class="jumbotron">
-        <h1>Bootstrap Tutorial</h1>
-        <p>Bootstrap is the most popular HTML, CSS, and JS framework for developing responsive, mobile-first projects on the web.</p>
-    </div>
-    @stop
+
+        <div id="jumbotron" style="width: 100%">
+            {!! $chart->container() !!}
+        </div>
+
+
+    @endsection
 
 @section('content')
     <h1>Inputs</h1>
@@ -37,6 +39,8 @@
                 </div>
                 <div class="modal-body">
                     <form id="addRecord" name="addRecord" class="form-horizontal">
+
+
                         <input type="hidden" name="record_id" id="record_id">
 
                         <div class="form-group">
@@ -82,9 +86,11 @@
             </div>
         </div>
     </div>
-@stop
+@endsection
 
 
 @section('scripts')
     <script src="{{ asset('js/ajaxController.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>
+    {!! $chart->script() !!}
 @endsection

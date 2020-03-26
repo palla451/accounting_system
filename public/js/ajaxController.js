@@ -1,6 +1,9 @@
 $(function () {
 
     var route = $('.table').data('route');
+    var canvas = $("#canvas")[0];
+    // var ctx = canvas.getContext('2d');
+
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -63,6 +66,7 @@ $(function () {
                 $('#addRecord').trigger("reset");
                 $('#saveBtn').html('Send');
                 table.draw();
+                canvas.draw();
             },
             error: function (data) {
                 console.log('Error:', data);
