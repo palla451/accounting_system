@@ -6,6 +6,7 @@ use App\Charts\InputChart;
 use App\Models\Payment;
 use App\Models\User;
 use Carbon\Carbon;
+use ConsoleTVs\Charts\Classes\Chartjs\Chart;
 use Illuminate\Http\Request;
 use App\Models\Input;
 use DateTime;
@@ -51,7 +52,12 @@ class InputsController extends Controller
         }
 
         $payments = Payment::all();
-        $chart = $this->chart($user);
+
+        $mounthInput = $this->getQueryChart($user);
+        $chart = new InputChart();
+        $api = route('chartApi');
+        $chart->labels($mounthInput->keys())->load($api);
+
 
         return view('layout.dashboard',['payments' => $payments, 'user' => $user, 'chart' => $chart]);
     }
@@ -181,4 +187,40 @@ class InputsController extends Controller
         return $chart;
 
     }
+
+    public function getQueryChart($user)
+    {
+        $lastMounthInput = Input::whereDate('date','>=', Carbon::now()->subDays('30'))
+            ->where('user_id', '=', $user->id)
+            ->orderBy('date','asc')
+            ->get()
+            ->groupBy(function($input) {
+                return Carbon::parse($input->date)->format('d-m');
+            });
+
+        $mounthInput = $lastMounthInput->map(function ($result) {
+            return number_format((float)$result->sum('import_as_float'), 2, '.', '');
+        });
+//
+//        $chart = new InputChart();
+//        $chart->labels($mounthInput->keys());
+//        $chart->dataset('Last Mounth Input','line' , $mounthInput->values())
+//            ->backgroundColor('rgb(0,123,255)');
+
+        return $mounthInput;
+    }
+
+
+    /**
+     * Function for test ChartTv
+     */
+    public function chartApi() {
+        $user = Auth::user();
+        $chart = new InputChart();
+        $mounthInput = $this->getQueryChart($user);
+        $chart->dataset('Last Mounth Input', 'line', $mounthInput->values())
+                            ->backgroundColor('rgb(0,123,255)');
+        return json_decode($chart->api());
+    }
+
 }

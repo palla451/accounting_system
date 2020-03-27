@@ -5,11 +5,13 @@
 
 <div class ="loader loader-default is-active"></div>
 @section('graphic')
-
+    <form name="chart">
         <div id="jumbotron" style="width: 100%">
             {!! $chart->container() !!}
         </div>
 
+        <button type="submit" class="btn btn-primary" >refresh</button>
+    </form>
 
     @endsection
 

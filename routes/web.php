@@ -33,12 +33,10 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
     Route::resource('inputs','InputsController');
     Route::resource('outputs','OutputsController');
 
-
+    Route::get('chartApi', 'InputsController@chartApi')->name('chartApi');
 });
 
 Route::get('/clear-cache', function() {
    Artisan::call('cache:clear');
     return "Cache is cleared";
 });
-
-

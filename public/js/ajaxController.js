@@ -1,7 +1,6 @@
 $(function () {
 
     var route = $('.table').data('route');
-    var canvas = $("#canvas")[0];
     // var ctx = canvas.getContext('2d');
 
     $.ajaxSetup({
@@ -46,6 +45,7 @@ $(function () {
             $('#payment').val(data.payments[0].id);
             $('#import').val(data.import);
             $('#datepicker').val(dateCovert);
+            $("form[name='chart']").submit();
         })
     });
 
@@ -65,8 +65,8 @@ $(function () {
                 $(".se-pre-con").delay(2000).fadeOut();
                 $('#addRecord').trigger("reset");
                 $('#saveBtn').html('Send');
+                $("form[name='chart']").submit();
                 table.draw();
-                canvas.draw();
             },
             error: function (data) {
                 console.log('Error:', data);
@@ -78,22 +78,27 @@ $(function () {
 
     $('body').on('click', '.deleteRecord', function () {
         var record_id = $(this).data("id");
-        confirm("Are You sure want to delete !");
-        $.ajax({
-            type: "DELETE",
-            url: route + '/' + record_id,
-            beforeSend: function () {
-                $(".se-pre-con").css("opacity", 0.5).show();
-            },
-            success: function (data) {
-                $(".se-pre-con").delay(2000).fadeOut();
-                table.draw();
-            },
-            error: function (data) {
-                console.log('Error:', data);
-            }
-        });
+        if(confirm("Are You sure want to delete !")){
+            $.ajax({
+                type: "DELETE",
+                url: route + '/' + record_id,
+                beforeSend: function () {
+                    $(".se-pre-con").css("opacity", 0.5).show();
+                },
+                success: function (data) {
+                    $(".se-pre-con").delay(2000).fadeOut();
+                    $("form[name='chart']").submit();
+                    table.draw();
+                },
+                error: function (data) {
+                    console.log('Error:', data);
+                }
+            });
+        };
     });
+
+
+
 
 });
 
@@ -103,3 +108,11 @@ function convertDateTostring(dateConvert) {
     var newDate = dateSplit[2] + '-' + dateSplit[1] + '-' + dateSplit[0];
     return newDate;
 }
+
+function submitChart(){
+    $("form[name='chart']").submit(function(evt) {
+        return true;
+    });
+}
+
+
