@@ -74,21 +74,23 @@ $(function () {
 
     $('body').on('click', '.deleteRecord', function () {
         var record_id = $(this).data("id");
-        confirm("Are You sure want to delete !");
-        $.ajax({
-            type: "DELETE",
-            url: route + '/' + record_id,
-            beforeSend: function () {
-                $(".se-pre-con").css("opacity", 0.5).show();
-            },
-            success: function (data) {
-                $(".se-pre-con").delay(2000).fadeOut();
-                table.draw();
-            },
-            error: function (data) {
-                console.log('Error:', data);
-            }
-        });
+        if(confirm("Are You sure want to delete !")){
+            $.ajax({
+                type: "DELETE",
+                url: route + '/' + record_id,
+                beforeSend: function () {
+                    $(".se-pre-con").css("opacity", 0.5).show();
+                },
+                success: function (data) {
+                    $(".se-pre-con").delay(2000).fadeOut();
+                    table.draw();
+                },
+                error: function (data) {
+                    console.log('Error:', data);
+                }
+            });
+        };
+
     });
 
 });
