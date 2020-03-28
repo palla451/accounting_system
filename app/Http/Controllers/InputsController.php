@@ -20,8 +20,11 @@ class InputsController extends Controller
      */
     public function index(Request $request)
     {
+        $user = Auth::user();
         if ($request->ajax()) {
-            $data = Input::latest()->with('payments')->get();
+            $data = Input::latest()->with('payments')
+                ->where('user_id','=', $user->id)->get();
+
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function($row){
