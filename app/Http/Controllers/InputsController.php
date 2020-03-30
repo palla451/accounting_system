@@ -23,7 +23,6 @@ class InputsController extends Controller
      */
     public function index(Request $request)
     {
-
         $user = Auth::user();
 
         if ($request->ajax()) {
