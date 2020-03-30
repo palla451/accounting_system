@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Charts\InputChart;
+use App\Charts\DataChart;
 use App\Models\Payment;
 use App\Models\User;
 use Carbon\Carbon;
-use ConsoleTVs\Charts\Classes\Chartjs\Chart;
 use Illuminate\Http\Request;
 use App\Models\Input;
 use DateTime;
@@ -54,7 +53,7 @@ class InputsController extends Controller
         $payments = Payment::all();
 
         $mounthInput = $this->getQueryChart($user);
-        $chart = new InputChart();
+        $chart = new DataChart();
         $api = route('chartApiInput');
         $chart->labels($mounthInput->keys())->load($api);
 
@@ -179,7 +178,7 @@ class InputsController extends Controller
                         return number_format((float)$result->sum('import_as_float'), 2, '.', '');
                     });
 
-        $chart = new InputChart();
+        $chart = new DataChart();
         $chart->labels($mounthInput->keys());
 
         return $chart;
@@ -213,7 +212,7 @@ class InputsController extends Controller
         $test = $request->all();
 
         $user = Auth::user();
-        $chart = new InputChart();
+        $chart = new DataChart();
         $mounthInput = $this->getQueryChart($user);
         $chart->dataset('Last Mounth Input', 'line', $mounthInput->values())
                             ->color('rgb(0,123,255)');

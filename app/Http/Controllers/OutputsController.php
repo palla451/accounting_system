@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Charts\InputChart;
+use App\Charts\DataChart;
 use App\Models\Output;
 use App\Models\Payment;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use DateTime;
@@ -50,7 +49,7 @@ class OutputsController extends Controller
         $user = Auth::user();
 
         $mounthOutput = $this->getQueryChart($user);
-        $chart = new InputChart();
+        $chart = new DataChart();
         $api = route('chartApiOutput');
         $chart->labels($mounthOutput->keys())->load($api);
 
@@ -174,7 +173,7 @@ class OutputsController extends Controller
             return number_format((float)$result->sum('import_as_float'), 2, '.', '');
         });
 
-        $chart = new InputChart();
+        $chart = new DataChart();
         $chart->labels($mounthOutput->keys());
 
         return $chart;
@@ -205,7 +204,7 @@ class OutputsController extends Controller
     public function chartApiOutput() {
 
         $user = Auth::user();
-        $chart = new InputChart();
+        $chart = new DataChart();
         $mounthOutput = $this->getQueryChart($user);
         $chart->dataset('Last Mounth output', 'line', $mounthOutput->values())
             ->color('rgb(0,123,255)');;

@@ -4,12 +4,12 @@ namespace App\Charts;
 
 use ConsoleTVs\Charts\Classes\Chartjs\Chart;
 
-class InputChart extends Chart
+class DataChart extends Chart
 {
     /**
      * Initializes the chart.
      *
-     * @return voids
+     * @return void
      */
     public function __construct()
     {
