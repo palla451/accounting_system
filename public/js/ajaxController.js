@@ -1,6 +1,12 @@
 $(function () {
 
     var route = $('.table').data('route');
+    var char_id = $('#char_id').val();
+    var char_api = $('#char_api').val();
+    console.log(char_id);
+    console.log(char_api);
+
+
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -62,6 +68,7 @@ $(function () {
                 $(".se-pre-con").delay(2000).fadeOut();
                 $('#addRecord').trigger("reset");
                 $('#saveBtn').html('Send');
+                console.log(char_id + '_refresh(' + char_api + ')');
                 table.draw();
             },
             error: function (data) {

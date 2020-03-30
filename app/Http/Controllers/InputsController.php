@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Charts\DataChart;
 use App\Models\Payment;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Input;
 use DateTime;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class InputsController extends Controller
@@ -21,36 +24,40 @@ class InputsController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
+
         if ($request->ajax()) {
-            $data = Input::latest()->with('payments')
-                ->where('user_id','=', $user->id)->get();
+            $data = Input::latest()->with('payments')->where('user_id', '=', $user->id)->get();
+                return DataTables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function($row){
 
-            return DataTables::of($data)
-                ->addIndexColumn()
-                ->addColumn('action', function($row){
+                        $btn = '<a href="javascript:void(0)" data-toggle="tooltip" data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editRecord">Edit</a>';
 
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip" data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editRecord">Edit</a>';
+                        $btn = $btn.' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteRecord">Delete</a>';
 
-                    $btn = $btn.' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteRecord">Delete</a>';
-
-                    return $btn;
-                })
-                ->addColumn('payment', function ($data) {
-                    foreach($data->payments as $payments){
-                        return $payments->name;
-                    }
-                })
-                ->editColumn('date', function ($data){
-                    return date('d-m-yy', strtotime($data->date) );
-                })
-                ->rawColumns(['action'])
-                ->make(true);
+                        return $btn;
+                    })
+                    ->addColumn('payment', function ($data) {
+                        foreach($data->payments as $payments){
+                            return $payments->name;
+                        }
+                    })
+                    ->editColumn('date', function ($data){
+                        return date('d-m-yy', strtotime($data->date) );
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
         }
 
         $payments = Payment::all();
-        $user = Auth::user();
 
-        return view('layout.dashboard',['payments' => $payments, 'user' => $user]);
+        $mounthInput = $this->getQueryChart($user);
+        $chart = new DataChart();
+        $api = route('chartApiInput');
+        $chart->labels($mounthInput->keys())->load($api);
+
+
+        return view('layout.dashboard',['payments' => $payments, 'user' => $user, 'chart' => $chart]);
     }
 
     /**
@@ -74,7 +81,7 @@ class InputsController extends Controller
         $user = Auth::user();
 
         $myDateTime = DateTime::createFromFormat('d-m-Y', $request->get('date'));
-        $newDateString = $myDateTime->format('Y-m-d H:i');
+        $newDateString = $myDateTime->format('Y-m-d');
 
         $input = Input::updateOrCreate(['id' => $request->record_id],
             [
@@ -155,4 +162,60 @@ class InputsController extends Controller
 
         return response()->json(['success'=>'Input deleted successfully.']);
     }
+
+    public function chart($user)
+    {
+        $lastMounthInput = Input::whereDate('date','>=', Carbon::now()->subDays('30'))
+                                ->where('user_id', '=', $user->id)
+                                ->orderBy('date','asc')
+                                     ->get()
+                                    ->groupBy(function($input) {
+                                        return Carbon::parse($input->date)->format('d-m');
+                        });
+
+        $mounthInput = $lastMounthInput->map(function ($result) {
+                        return number_format((float)$result->sum('import_as_float'), 2, '.', '');
+                    });
+
+        $chart = new DataChart();
+        $chart->labels($mounthInput->keys());
+
+        return $chart;
+    }
+
+    public function getQueryChart($user)
+    {
+        $lastMounthInput = Input::whereDate('date','>=', Carbon::now()->subDays('30'))
+            ->where('user_id', '=', $user->id)
+            ->orderBy('date','asc')
+                ->get()
+                    ->groupBy(function($input) {
+                        return Carbon::parse($input->date)->format('d-m');
+            });
+
+        $mounthInput = $lastMounthInput->map(function ($result) {
+            return number_format((float)$result->sum('import_as_float'), 2, '.', '');
+        });
+
+        return $mounthInput;
+    }
+
+
+
+
+    /**
+     * Function for test ChartTv
+     */
+    public function chartApiInput(Request $request) {
+
+        $test = $request->all();
+
+        $user = Auth::user();
+        $chart = new DataChart();
+        $mounthInput = $this->getQueryChart($user);
+        $chart->dataset('Last Mounth Input', 'line', $mounthInput->values())
+                            ->color('rgb(0,123,255)');
+        return json_decode($chart->api());
+    }
+
 }
