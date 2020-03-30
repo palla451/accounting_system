@@ -33,7 +33,8 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
     Route::resource('inputs','InputsController');
     Route::resource('outputs','OutputsController');
 
-    Route::get('chartApi', 'InputsController@chartApi')->name('chartApi');
+    Route::get('chartApiInput', 'InputsController@chartApiInput')->name('chartApiInput');
+    Route::get('chartApiOutput', 'OutputsController@chartApiOutput')->name('chartApiOutput');
 });
 
 Route::get('/clear-cache', function() {

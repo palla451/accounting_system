@@ -25,4 +25,9 @@ class Output extends Model
     {
         return $this->morphToMany(Payment::class, 'paymentable');
     }
+
+    public function getImportAsFloatAttribute()
+    {
+        return (float) str_replace(',', '.', $this->import);
+    }
 }

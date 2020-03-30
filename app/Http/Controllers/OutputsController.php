@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Charts\InputChart;
 use App\Models\Output;
 use App\Models\Payment;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use DateTime;
 use Illuminate\Support\Facades\Auth;
@@ -47,7 +49,12 @@ class OutputsController extends Controller
         $payments = Payment::all();
         $user = Auth::user();
 
-        return view('layout.dashboardOutput',['payments' => $payments, 'user' => $user]);
+        $mounthOutput = $this->getQueryChart($user);
+        $chart = new InputChart();
+        $api = route('chartApiOutput');
+        $chart->labels($mounthOutput->keys())->load($api);
+
+        return view('layout.dashboardOutput',['payments' => $payments, 'user' => $user, 'chart' => $chart]);
     }
 
     /**
@@ -151,5 +158,57 @@ class OutputsController extends Controller
         $output->delete();
 
         return response()->json(['success'=>'Output deleted successfully.']);
+    }
+
+    public function chart($user)
+    {
+        $lastMounthOutput = Output::whereDate('date','>=', Carbon::now()->subDays('30'))
+            ->where('user_id', '=', $user->id)
+            ->orderBy('date','asc')
+            ->get()
+            ->groupBy(function($output) {
+                return Carbon::parse($output->date)->format('d-m');
+            });
+
+        $mounthOutput = $lastMounthOutput->map(function ($result) {
+            return number_format((float)$result->sum('import_as_float'), 2, '.', '');
+        });
+
+        $chart = new InputChart();
+        $chart->labels($mounthOutput->keys());
+
+        return $chart;
+
+    }
+
+    public function getQueryChart($user)
+    {
+        $lastMounthOutput = Output::whereDate('date','>=', Carbon::now()->subDays('30'))
+            ->where('user_id', '=', $user->id)
+            ->orderBy('date','asc')
+            ->get()
+            ->groupBy(function($output) {
+                return Carbon::parse($output->date)->format('d-m');
+            });
+
+        $mounthOutput = $lastMounthOutput->map(function ($result) {
+            return number_format((float)$result->sum('import_as_float'), 2, '.', '');
+        });
+
+        return $mounthOutput;
+    }
+
+
+    /**
+     * Function for test ChartTv
+     */
+    public function chartApiOutput() {
+
+        $user = Auth::user();
+        $chart = new InputChart();
+        $mounthOutput = $this->getQueryChart($user);
+        $chart->dataset('Last Mounth output', 'line', $mounthOutput->values())
+            ->color('rgb(0,123,255)');;
+        return json_decode($chart->api());
     }
 }

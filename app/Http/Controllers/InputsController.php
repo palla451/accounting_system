@@ -55,7 +55,7 @@ class InputsController extends Controller
 
         $mounthInput = $this->getQueryChart($user);
         $chart = new InputChart();
-        $api = route('chartApi');
+        $api = route('chartApiInput');
         $chart->labels($mounthInput->keys())->load($api);
 
 
@@ -181,11 +181,8 @@ class InputsController extends Controller
 
         $chart = new InputChart();
         $chart->labels($mounthInput->keys());
-        $chart->dataset('Last Mounth Input','line' , $mounthInput->values())
-                    ->backgroundColor('rgb(0,123,255)');
 
         return $chart;
-
     }
 
     public function getQueryChart($user)
@@ -193,33 +190,33 @@ class InputsController extends Controller
         $lastMounthInput = Input::whereDate('date','>=', Carbon::now()->subDays('30'))
             ->where('user_id', '=', $user->id)
             ->orderBy('date','asc')
-            ->get()
-            ->groupBy(function($input) {
-                return Carbon::parse($input->date)->format('d-m');
+                ->get()
+                    ->groupBy(function($input) {
+                        return Carbon::parse($input->date)->format('d-m');
             });
 
         $mounthInput = $lastMounthInput->map(function ($result) {
             return number_format((float)$result->sum('import_as_float'), 2, '.', '');
         });
-//
-//        $chart = new InputChart();
-//        $chart->labels($mounthInput->keys());
-//        $chart->dataset('Last Mounth Input','line' , $mounthInput->values())
-//            ->backgroundColor('rgb(0,123,255)');
 
         return $mounthInput;
     }
 
 
+
+
     /**
      * Function for test ChartTv
      */
-    public function chartApi() {
+    public function chartApiInput(Request $request) {
+
+        $test = $request->all();
+
         $user = Auth::user();
         $chart = new InputChart();
         $mounthInput = $this->getQueryChart($user);
         $chart->dataset('Last Mounth Input', 'line', $mounthInput->values())
-                            ->backgroundColor('rgb(0,123,255)');
+                            ->color('rgb(0,123,255)');
         return json_decode($chart->api());
     }
 
