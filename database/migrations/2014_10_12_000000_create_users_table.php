@@ -21,8 +21,11 @@ class CreateUsersTable extends Migration
                 $table->timestamp('email_verified_at')->nullable();
                 $table->string('password');
                 $table->unsignedBigInteger('job_id')->index('job_id');
+                $table->foreign('job_id')->references('id')->on('jobs')
+                    ->onDelete('cascade')->onUpdate('cascade');
                 $table->rememberToken();
                 $table->timestamps();
+                $table->softDeletes();
         });
     }
 

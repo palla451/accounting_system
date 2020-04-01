@@ -16,6 +16,10 @@ class CreateOutputsTable extends Migration
         Schema::create('outputs', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->index('user_id');
+            $table->foreign('user_id')->references('id')->on('users')
+                ->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('id')->references('paymentable_id')->on('paymentables')
+                ->onDelete('cascade')->onUpdate('cascade');
             $table->text('description');
             $table->string('import', 15);
             $table->dateTime('date');

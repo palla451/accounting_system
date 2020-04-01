@@ -27,7 +27,7 @@
         <!-- Custom styles for this template -->
         <link href="{{ asset('css/signin.css')  }}" rel="stylesheet">
 
-        <title>Bookkeeping - @yield('title')</title>
+        <title>Accounting System - @yield('title')</title>
     </head>
     <body class="text-center">
 

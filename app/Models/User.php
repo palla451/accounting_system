@@ -68,4 +68,15 @@ class User extends Authenticatable
     {
         return $this->hasMany(Input::class);
     }
+
+    public function isAdmin()
+    {
+        foreach ($this->roles()->get() as $role)
+        {
+            if ($role->name == 'admin')
+            {
+                return true;
+            }
+        }
+    }
 }

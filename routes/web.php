@@ -30,11 +30,15 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
           return redirect()->route('inputs.index');
     });
 
+    Route::get('user/profile/{id}', 'ShowProfile')->name('myProfile');
+
     Route::resource('inputs','InputsController');
     Route::resource('outputs','OutputsController');
 
     Route::get('chartApiInput', 'InputsController@chartApiInput')->name('chartApiInput');
     Route::get('chartApiOutput', 'OutputsController@chartApiOutput')->name('chartApiOutput');
+
+    Route::resource('users','UserController');
 });
 
 Route::get('/clear-cache', function() {
