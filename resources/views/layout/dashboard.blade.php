@@ -4,14 +4,16 @@
 
 
 <div class ="loader loader-default is-active"></div>
+
 @section('graphic')
     <form name="chart">
         <input type="hidden" id="char_api" value="{{ $chart->id }}_api_url" />
         <input type="hidden" id="char_id" value="{{ $chart->id }}" />
-        <div id="jumbotron" style="width: 100%">
-            {!! $chart->container() !!}
+        <div class="jumbotron  jumbotron-fluid">
+            <div class="container">
+                {!! $chart->container() !!}
+            </div>
         </div>
-
         <button type="submit" class="btn btn-primary" >refresh</button>
     </form>
     @endsection
