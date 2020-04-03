@@ -1,4 +1,4 @@
-<h1 style="color: red"><strong>Laravel 7</strong></h1>
+<p style="color: red; font-size:48px">Laravel 7</p>
 <h2>A simple monitoring system of inputs and outputs</h2>
 <p><strong>## Getting Started</strong></p>
 <ul style="list-style-type: disc;">
@@ -10,5 +10,5 @@
 <li>Run <code>>php artisan db:seed</code></li>
 <li>That's it: launch the main URL.</li>
 <li>Admin credential: email: <code>admin@localhost.com</code> - password: <code>admin</code></li>
-<li>User credential: email: user<code>@localhost.com</code> - password: <em>user</em></li>
+<li>User credential: email: <code>user@localhost.com</code> - password: <code>user</code></li>
 </ul>
