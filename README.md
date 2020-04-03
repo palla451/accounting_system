@@ -1,4 +1,4 @@
-<p style="color: red; font-size:48px">Laravel 7</p>
+<h1><strong>Laravel 7</strong></h1>
 <h2>A simple monitoring system of inputs and outputs</h2>
 <p><strong>## Getting Started</strong></p>
 <ul style="list-style-type: disc;">
