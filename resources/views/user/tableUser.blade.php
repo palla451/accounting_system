@@ -1,6 +1,6 @@
 @extends('layout.template')
 
-@section('title', 'Dashboard Ouput')
+@section('title', 'Administrator')
 
 
 <div class ="loader loader-default is-active"></div>
@@ -9,7 +9,7 @@
 
         <div class="jumbotron  jumbotron-fluid">
             <div class="container">
-                <h1>Sono qui</h1>
+                <h1>Table user administration</h1>
             </div>
         </div>
 
@@ -48,21 +48,39 @@
                     <div class="form-group">
                         <label for="fstName" class="col-sm-3 control-label">First name</label>
                         <div class="col-sm-12">
-                            <input type="text" id="fstName" name="import" placeholder="First name" class="form-control" required />
+                            <input type="text" id="fstName" name="fstName" placeholder="First name" class="form-control" />
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="lstName" class="col-sm-3 control-label">Last name</label>
                         <div class="col-sm-12">
-                            <input type="text" id="lstName" name="lstName" placeholder="Last name" class="form-control" required />
+                            <input type="text" id="lstName" name="lstName" placeholder="Last name" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="job" class="col-sm-3 control-label">Job</label>
+                        <div class="col-sm-12">
+                            <select type="number" name="job" class="form-control" id="job" required>
+                                <option value="{{ $user->job_id }}" selected>{{ $user->job->name }}</option>
+                                @foreach( $jobs as $job)
+                                    @if($job->id != $user->job_id)
+                                        <option value="{{ $job->id }}"> {{ $job->name }} </option>
+                                    @endif
+                                @endforeach
+
+                                @if ($errors->has('job_id'))
+                                    <span class="error">{{ $errors->first('job_id') }}</span>
+                                @endif
+                            </select>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="password" class="col-sm-3 control-label">Password</label>
                         <div class="col-sm-12">
-                            <input type="password" id="password" name="password" placeholder="Password" class="form-control" required />
+                            <input type="password" id="password" name="password" placeholder="**********" class="form-control" />
                         </div>
                     </div>
 

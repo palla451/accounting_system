@@ -31,7 +31,6 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
     });
 
     Route::get('user/profile/{id}', 'ShowProfile')->name('myProfile');
-
     Route::resource('inputs','InputsController');
     Route::resource('outputs','OutputsController');
 
@@ -39,6 +38,9 @@ Route::middleware('auth')->prefix('dashboard')->group(function(){
     Route::get('chartApiOutput', 'OutputsController@chartApiOutput')->name('chartApiOutput');
 
     Route::resource('users','UserController');
+    Route::delete('users/delete/{id}','UserController@delete');
+    Route::patch('users/restore/{id}', 'UserController@restore');
+
 });
 
 Route::get('/clear-cache', function() {

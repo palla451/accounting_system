@@ -50,12 +50,19 @@
                 @yield('graphic')
 
                 @yield('content')
-                <p class="mt-5 mb-3 text-muted">&copy; 2020-2021 by G.D.</p>
+
             </div>
             <!-- /#content -->
-
+            <!-- Copyright -->
+            <div class="footer-copyright text-center py-3">
+                <p class="mt-5 mb-3 text-muted">&copy; 2020-2021 by Giovanni D'Apote</p>
+            </div>
+            <!-- Copyright -->
         </div>
         <!-- /#page-content-wrapper -->
+
+
+
 
     </div>
 
